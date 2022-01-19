@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContaResponseDto {
+public class ContaResponseDto { // a resposta com os campos que sera exibida no postman
 
-    public String agencia;
-    public String numConta;
-    public ContaEnum tipo;
-    public Integer digitoVerifador;
-    public String clienteCpf;
-    public double saldo;
+    private String agencia;
+    private String numConta;
+    private ContaEnum tipo;
+    private Integer digitoVerifador;
+//  private String clienteCpf; // exibe como resposta quando requisitado o campo clienteCpf no postaman
+    private double saldo;
 }

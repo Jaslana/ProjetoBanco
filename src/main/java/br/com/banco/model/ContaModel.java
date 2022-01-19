@@ -37,5 +37,6 @@ public class ContaModel {
     @Column
     private double saldo;
 
+    @Column
     private Integer qtdSaques; // sera utilizado em taxatransaçoes
 }

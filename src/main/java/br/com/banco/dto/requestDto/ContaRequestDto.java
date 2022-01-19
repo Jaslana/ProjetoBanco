@@ -7,32 +7,30 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContaRequestDto {
+public class ContaRequestDto { //a solicitaçao dos campos que sera requisitada no postaman
 
     @NotNull
-    @NotEmpty //Não permite valor nulo e além disso seu tamanho deve ser maior que zero
+    @NotEmpty
     private String agencia;
 
     @NotEmpty
     private String numConta;
 
-    @NotNull //Não permite um valor nulo, porém permite um valor vazio.
+    @NotNull
     private ContaEnum tipo;
 
-    @Max(value = 99) //Define o tamanho
+    @Max(value = 99)
     @NotNull
     private Integer digitoVerifador;
 
     @CPF //Dependencia spring validation
-    @Min(11)
-    private String clienteCpf;
+    private String clienteCpf;  //campo é solicitado para ser atrelado a algum valor no postaman
 
     @NotNull
     private double saldo;
