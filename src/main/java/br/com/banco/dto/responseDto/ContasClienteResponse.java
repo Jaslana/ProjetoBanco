@@ -3,10 +3,9 @@ package br.com.banco.dto.responseDto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 @Data
 @Builder
-public class ClienteContasResponse {
+public class ContasClienteResponse {
+    ContaResponseDto contas;
     ClienteResponseDto cliente;
-    List<ContaResponseDto> contas;
 }

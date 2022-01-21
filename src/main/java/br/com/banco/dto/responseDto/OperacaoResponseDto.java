@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OperacaoResponseDto {
+
     public String numeroConta;
     public double valor;
     public double taxa;

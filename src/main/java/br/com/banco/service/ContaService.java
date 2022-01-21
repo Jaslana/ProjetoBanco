@@ -28,13 +28,12 @@ public class ContaService {
     private final ClienteRepository clienteRepository;
     private final ModelMapper modelMapper;
 
-
     public ContaResponseDto salvarConta(ContaRequestDto contaRequestDto) {
+
         ContaModel model = modelMapper.map(contaRequestDto, ContaModel.class);
         ContaResponseDto contaResponse = modelMapper.map(model, ContaResponseDto.class);
 
         ContaModel contaExistente = contaRepository.getByNumConta(model.getNumConta()); //Repository
-
         if (!Objects.isNull(contaExistente)) {
             throw new ContaJaCadastrada("Numero de conta: " + model.getNumConta() + " ja cadastrada no sistema");
         }
@@ -48,11 +47,9 @@ public class ContaService {
                 .stream()
                 .map(this::toContaResponseDto)
                 .collect(Collectors.toList());
-
         //retornar que nao existe nenhuma conta
     }
     public ContaResponseDto toContaResponseDto(ContaModel contaModel) {
-
         var contaResponseDto = new ContaResponseDto();
         contaResponseDto.setAgencia(contaModel.getAgencia());
         contaResponseDto.setNumConta(contaModel.getNumConta());
@@ -61,7 +58,6 @@ public class ContaService {
 //      contaResponseDto.setClienteCpf(contaModel.getClienteCpf()); //seria exibido o valor atrelado ao campo no postman se no contaresponsedto estivesse criado o campo ClienteCpf com os get e set
         contaResponseDto.setSaldo(contaModel.getSaldo());
 //      contaResponseDto.setQtdSaques(contaModel.getQtdSaques());
-
         return contaResponseDto;
     }
 
@@ -77,25 +73,19 @@ public class ContaService {
     public ContaResponseDto atualizarConta(String numConta, ContaRequestDto contaRequestDto) {
         contaRequestDto.setNumConta(numConta);
         ContaModel model = modelMapper.map(contaRequestDto, ContaModel.class);
-
         contaRepository.findByNumConta(model.getNumConta()).map(map -> {
             map.setAgencia(model.getAgencia());
             map.setTipo(model.getTipo());
             map.setDigitoVerifador(model.getDigitoVerifador());
             map.setSaldo(model.getSaldo());
-            ContaModel updated = contaRepository.save(map);
-            return updated;
+            return contaRepository.save(map);
         });
-        ContaResponseDto contaResponse = modelMapper.map(model, ContaResponseDto.class);
-
-        return contaResponse;
+        return modelMapper.map(model, ContaResponseDto.class);
     }
 
     public ContaResponseDelete deletarConta(String numConta) {
-
         ContaModel model = contaRepository.findByNumConta(numConta).orElseThrow(() ->
                 new ContaNaoEncontrada("Conta nao encontrado com o numero de conta : " + numConta));
-
         contaRepository.delete(model);
         ContaResponseDto contaResponseDto = modelMapper.map(model, ContaResponseDto.class);
         return ContaResponseDelete.builder()
@@ -104,6 +94,3 @@ public class ContaService {
                 build();
     }
 }
-
-
-

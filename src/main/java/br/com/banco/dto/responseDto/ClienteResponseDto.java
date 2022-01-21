@@ -13,5 +13,4 @@ public class ClienteResponseDto {
     public String cpf;
     public String telefone;
     public String endereco;
-
 }

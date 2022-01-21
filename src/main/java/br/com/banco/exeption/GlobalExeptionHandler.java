@@ -24,13 +24,11 @@ public class GlobalExeptionHandler {
         StandardError erros = new StandardError(exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erros);
     }
-
     @ExceptionHandler(CpfNaoEncontrado.class)
     public ResponseEntity<StandardError> handle(CpfNaoEncontrado exception) {
         StandardError erros = new StandardError(exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erros);
     }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<StandErrosMetodos>> handle(MethodArgumentNotValidException exception) {
         List<StandErrosMetodos> dto = new ArrayList<>();

@@ -25,19 +25,18 @@ import java.util.stream.Collectors;
 @Service //semanticamente anotamos como service que vai receber repository
 @RequiredArgsConstructor //
 public class ClienteService {
+
     private final ClienteRepository clienteRepository;
     private final ContaRepository contaRepository; // sera utilizado para pesquisa
     private final ModelMapper modelMapper; // sera utilizado na pesquisa
 
     public ResponseEntity<ClienteResponseDto> salvarCliente(ClienteRequestDto clienteRequestDto) {
-
 //modelmapper feito na mao estamos trasformando model para request
         ClienteModel model = new ClienteModel();
         model.setNome(clienteRequestDto.getNome());
         model.setEndereco(clienteRequestDto.getEndereco());
         model.setTelefone(clienteRequestDto.getTelefone());
         model.setCpf(clienteRequestDto.getCpf());
-
 //reponse para model
         ClienteResponseDto resDto = new ClienteResponseDto();
         resDto.setNome(model.getNome());
@@ -50,7 +49,6 @@ public class ClienteService {
             throw new CpfJaCadastrado("Cpf já cadastrado no sistema"); //captura a mensagem de erro
         }
         clienteRepository.save(model); // se nao salva
-
         return ResponseEntity.status(HttpStatus.CREATED).body(resDto); //retorna o status com o corpo completo
     }
 
@@ -60,7 +58,6 @@ public class ClienteService {
                 .map(this::toClienteoResponseDto)
                 .collect(Collectors.toList());
     }
-
     public ClienteResponseDto toClienteoResponseDto(ClienteModel clienteModel) {
         var clienteResponseDto = new ClienteResponseDto();
         clienteResponseDto.setNome(clienteModel.getNome());
@@ -69,19 +66,18 @@ public class ClienteService {
         clienteResponseDto.setEndereco(clienteModel.getEndereco());
         return clienteResponseDto;
     }
+
     public ClienteContasResponse consultarCpf(String cpf) {
         ClienteModel model = clienteRepository.findByCpf(cpf).orElseThrow(() ->
                 new CpfNaoEncontrado("Usuario nao encontrado com o CPF: " + cpf));
         List<ContaModel> contas = contaRepository.findAllByClienteCpf(cpf);
         List<ContaResponseDto> contaResponseDtoList = new ArrayList<>();
-        contas.forEach(item ->{
-            contaResponseDtoList.add(modelMapper.map(item,ContaResponseDto.class));
-        });
-
+        contas.forEach(item -> contaResponseDtoList.add(modelMapper.map(item,ContaResponseDto.class)));
         return ClienteContasResponse.builder()
                 .cliente(modelMapper.map(model,ClienteResponseDto.class))
                 .contas(contaResponseDtoList).build();
     }
+
     public ClienteResponseDto atualizarCliente(String cpf, ClienteRequestDto clienteRequestDto) {
         clienteRequestDto.setCpf(cpf);
         ClienteModel cpfNaoExiste = clienteRepository.findByCpf(cpf).orElseThrow(() ->
@@ -93,15 +89,12 @@ public class ClienteService {
             map.setCpf((cpf));
             map.setTelefone(model.getTelefone());
             map.setEndereco(model.getEndereco());
-            ClienteModel updated = clienteRepository.save(map);
-            return updated;
+            return clienteRepository.save(map);
         });
-        ClienteResponseDto clienteResponseDto = modelMapper.map(model, ClienteResponseDto.class);
-
-        return clienteResponseDto;
+        return modelMapper.map(model, ClienteResponseDto.class);
     }
-    public ClienteResponseDelete delete(String cpf) {
 
+    public ClienteResponseDelete delete(String cpf) {
         ClienteModel model = clienteRepository.findByCpf(cpf).orElseThrow(() ->
                 new CpfNaoEncontrado("Usuario nao encontrado com o CPF: " + cpf));
 

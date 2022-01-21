@@ -6,6 +6,7 @@ import br.com.banco.dto.responseDto.ContaResponseDto;
 import br.com.banco.dto.responseDto.ContasClienteResponse;
 import br.com.banco.service.ContaService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,13 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class ContaController {
+    private final ModelMapper modelMapper;
     private final ContaService contaService;
 
     @PostMapping(path = "/conta/salvar") //SALVAR
     public ContaResponseDto salvarConta(@RequestBody @Valid ContaRequestDto contaRequestDto) {
         return contaService.salvarConta(contaRequestDto);
     }
-
     @GetMapping(path = "/contas/consultar") //LISTAR TODOS
     public List<ContaResponseDto> consultarTodos() {
         return contaService.consultarTodos();

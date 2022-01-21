@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ContaResponseDto { // a resposta com os campos que sera exibida no postman
 
-    private String agencia;
-    private String numConta;
-    private ContaEnum tipo;
-    private Integer digitoVerifador;
-//  private String clienteCpf; // exibe como resposta quando requisitado o campo clienteCpf no postaman
-    private double saldo;
+    public  String agencia;
+    public  String numConta;
+    public  ContaEnum tipo;
+    public  Integer digitoVerifador;
+    //  private String clienteCpf; // exibe como resposta quando requisitado o campo clienteCpf no postaman
+    public double saldo;
 }
