@@ -42,4 +42,14 @@ public class GlobalExeptionHandler {
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }
+    @ExceptionHandler(ContaJaCadastrada.class) // serve para tratar todos os erros sem exibir mensagens desnecessarias na tela com apenas a mensagem configurada
+    public ResponseEntity<StandardError> handle(ContaJaCadastrada exception) {
+        StandardError erros = new StandardError(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erros);
+    }
+    @ExceptionHandler(ContaNaoEncontrada.class) // serve para tratar todos os erros sem exibir mensagens desnecessarias na tela com apenas a mensagem configurada
+    public ResponseEntity<StandardError> handle(ContaNaoEncontrada exception) {
+        StandardError erros = new StandardError(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erros);
+    }
 }

@@ -5,8 +5,8 @@ import br.com.banco.dto.responseDto.ClienteContasResponse;
 import br.com.banco.dto.responseDto.ClienteResponseDelete;
 import br.com.banco.dto.responseDto.ClienteResponseDto;
 import br.com.banco.dto.responseDto.ContaResponseDto;
-import br.com.banco.exeption.CpfNaoEncontrado;
 import br.com.banco.exeption.CpfJaCadastrado;
+import br.com.banco.exeption.CpfNaoEncontrado;
 import br.com.banco.model.ClienteModel;
 import br.com.banco.model.ContaModel;
 import br.com.banco.repository.ClienteRepository;
@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -70,16 +70,17 @@ public class ClienteService {
         return clienteResponseDto;
     }
     public ClienteContasResponse consultarCpf(String cpf) {
-       ClienteModel model = clienteRepository.findByCpf(cpf).orElseThrow(() ->
-               new CpfNaoEncontrado("Usuario nao encontrado com o CPF: " + cpf));
-        List<ContaModel> contas = contaRepository.findAllByClienteCpf(cpf); //vai pegar do repository
-        List<ContaResponseDto> contasresponse = Arrays.asList();
+        ClienteModel model = clienteRepository.findByCpf(cpf).orElseThrow(() ->
+                new CpfNaoEncontrado("Usuario nao encontrado com o CPF: " + cpf));
+        List<ContaModel> contas = contaRepository.findAllByClienteCpf(cpf);
+        List<ContaResponseDto> contaResponseDtoList = new ArrayList<>();
         contas.forEach(item ->{
-            contasresponse.add(modelMapper.map(item,ContaResponseDto.class));
+            contaResponseDtoList.add(modelMapper.map(item,ContaResponseDto.class));
         });
+
         return ClienteContasResponse.builder()
-                .cliente(modelMapper.map(model,ClienteResponseDto.class)) //ClienteContaResponse
-                .contas(contasresponse).build();  //ClienteContaResponse contas do cliente
+                .cliente(modelMapper.map(model,ClienteResponseDto.class))
+                .contas(contaResponseDtoList).build();
     }
     public ClienteResponseDto atualizarCliente(String cpf, ClienteRequestDto clienteRequestDto) {
         clienteRequestDto.setCpf(cpf);
